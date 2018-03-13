@@ -2,19 +2,27 @@ package com.equifax.ren.legal_agreement.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.Id;
 
-import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-public class LegalAgreement {
+@EqualsAndHashCode(callSuper = true)
+public class LegalAgreement extends AuditableMongoObject {
 
     @JsonIgnore
     @Id
     String id;
 
+    @NotBlank
     String content;
-    LocalDate created;
-    LocalDate validThrough;
-    boolean isDeleted;
+
+    @NotNull
+    LocalDate expirationDate;
+
+    @JsonIgnore
+    Boolean deleted;
 }
