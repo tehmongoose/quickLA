@@ -43,6 +43,7 @@ public class LegalAgreementServiceImpl implements LegalAgreementService {
         validator.validate(legalAgreement);
 
         legalAgreement.setId(id);
+        legalAgreement.setDeleted(false);
         repository.save(legalAgreement);
     }
 

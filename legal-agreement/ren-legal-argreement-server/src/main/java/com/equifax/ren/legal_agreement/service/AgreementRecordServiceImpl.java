@@ -49,7 +49,10 @@ public class AgreementRecordServiceImpl implements AgreementRecordService {
     public void updateAgreementRecord(String id, AgreementRecord agreementRecord) {
         validateId(id);
         validator.validate(agreementRecord);
+
+        agreementRecord.setDeleted(false);
         agreementRecord.setId(id);
+
         repository.save(agreementRecord);
     }
 

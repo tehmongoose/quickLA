@@ -4,11 +4,8 @@ import com.equifax.ren.legal_agreement.api.AgreementRecordService;
 import com.equifax.ren.legal_agreement.domain.AgreementRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("1.0/agreementRecords")
@@ -22,30 +19,38 @@ public class AgreementRecordController {
     }
 
     @GetMapping("/{id}")
-    public AgreementRecord getAgreementRecord(@NotBlank
-                                              @PathVariable("id") String id) {
+    public AgreementRecord getAgreementRecord(@PathVariable("id") String id) {
+        checkId(id);
         return service.getAgreementRecord(id);
     }
 
     @PostMapping
-    public String createAgreementRecord(@Valid
-                                        @RequestBody AgreementRecord agreementRecord) {
+    public String createAgreementRecord(@RequestBody AgreementRecord agreementRecord) {
+        checkAgreementRecord(agreementRecord);
         return service.createAgreementRecord(agreementRecord);
     }
 
-    @PutMapping("/{id}") //Maybe we shouldn't allow them to be updated?? maybe require a privilege?
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateAgreementRecord(@NotBlank
-                                      @PathVariable("id") String id,
-                                      @Valid
+    public void updateAgreementRecord(@PathVariable("id") String id,
                                       @RequestBody AgreementRecord agreementRecord) {
+        checkId(id);
+        checkAgreementRecord(agreementRecord);
         service.updateAgreementRecord(id, agreementRecord);
     }
 
-    @DeleteMapping("/{id}") //Maybe we shouldn't allow them to be deleted?? maybe require a privilege?
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAgreementRecord(@NotBlank
-                                      @PathVariable("id") String id) {
+    public void deleteAgreementRecord(@PathVariable("id") String id) {
+        checkId(id);
         service.deleteAgreementRecord(id);
+    }
+
+    private void checkId(String id) {
+        Assert.hasText(id, "The Agreement Record 'id' path variable must not be null");
+    }
+
+    private void checkAgreementRecord(AgreementRecord agreementRecord) {
+        Assert.notNull(agreementRecord, "Request body must contain a non-null Agreement Record object");
     }
 }

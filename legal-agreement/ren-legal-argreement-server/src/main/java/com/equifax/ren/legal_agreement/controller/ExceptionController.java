@@ -1,6 +1,10 @@
 package com.equifax.ren.legal_agreement.controller;
 
+import com.equifax.ren.legal_agreement.domain.AgreementRecord;
 import com.equifax.ren.legal_agreement.domain.ErrorInfo;
+import com.equifax.ren.legal_agreement.exception.AgreementRecordNotFoundException;
+import com.equifax.ren.legal_agreement.exception.ConstraintViolationException;
+import com.equifax.ren.legal_agreement.exception.LegalAgreementNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,18 +23,34 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public @ResponseBody
-    ErrorInfo handleBadRequest(HttpServletRequest req, Exception ex) {
+    ErrorInfo handleGenericError(HttpServletRequest req, Exception ex) {
         LOGGER.error(ex.getMessage(), ex);
-        return new ErrorInfo(req.getRequestURL().toString(), ex);
+        return new ErrorInfo(req.getRequestURL().toString(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), ex);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class, IllegalArgumentException.class})
     public @ResponseBody
-    ErrorInfo handleInvalidMethodArg(HttpServletRequest req, Exception ex) {
+    ErrorInfo handleBadRequest(HttpServletRequest req, Exception ex) {
         LOGGER.debug(ex.getMessage(), ex);
-        return new ErrorInfo(req.getRequestURL().toString(), ex);
+        return new ErrorInfo(req.getRequestURL().toString(), HttpStatus.BAD_REQUEST.getReasonPhrase(), ex);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ConstraintViolationException.class})
+    public @ResponseBody
+    ErrorInfo handleBadRequest(HttpServletRequest req, ConstraintViolationException ex) {
+        LOGGER.debug(ex.getMessage(), ex);
+        return new ErrorInfo(req.getRequestURL().toString(), HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessages());
+    }
+
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({LegalAgreementNotFoundException.class, AgreementRecordNotFoundException.class})
+    public @ResponseBody
+    ErrorInfo handleNotFound(HttpServletRequest req, Exception ex) {
+        LOGGER.debug(ex.getMessage(), ex);
+        return new ErrorInfo(req.getRequestURL().toString(), HttpStatus.NOT_FOUND.getReasonPhrase(), ex);
+    }
 
 }
