@@ -27,7 +27,7 @@ public class RenLegalAgreementServerApplicationTests {
 		la.setDeleted(false);
 
         AgreementRecord ar = new AgreementRecord();
-        ar.setCustomer("someRandomId");
+        ar.setCustomerKey("someRandomId");
         ar.setDateAccepted(LocalDate.now());
 
 

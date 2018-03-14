@@ -1,4 +1,4 @@
-package com.equifax.ren.legal_agreement.api;
+package com.equifax.ren.legal_agreement.domain;
 
 public class ErrorInfo {
     public final String url;

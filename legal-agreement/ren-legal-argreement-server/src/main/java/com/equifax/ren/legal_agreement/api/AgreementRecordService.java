@@ -6,11 +6,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public interface AgreementRecordService {
-    AgreementRecord getAgreementRecord(@NotBlank String id);
+    AgreementRecord getAgreementRecord(String id);
 
-    String createAgreementRecord(@NotNull AgreementRecord agreementRecord);
+    String createAgreementRecord(AgreementRecord agreementRecord);
 
-    void updateAgreementRecord(@NotBlank String id, @NotNull AgreementRecord agreementRecord);
+    void updateAgreementRecord(String id, AgreementRecord agreementRecord);
 
-    void deleteAgreementRecord(@NotBlank String id);
+    void deleteAgreementRecord( String id);
 }

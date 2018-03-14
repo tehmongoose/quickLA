@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,10 +18,10 @@ public class LegalAgreement extends AuditableMongoObject {
     @Id
     String id;
 
-    @NotBlank
+    @NotBlank(message = "LegalAgreement's content field must not be blank")
     String content;
 
-    @NotNull
+    @NotNull(message = "LegalAgreement's expirationDate field must not be null")
     LocalDate expirationDate;
 
     @JsonIgnore
